@@ -1,4 +1,5 @@
 # GestorEventosDeportivos
+API Documentation: https://documenter.getpostman.com/view/12742099/2sAYkKKJ4G
 
 Este proyecto es una aplicación web desarrollada en Java que utiliza Servlets y JSP para consumir APIs REST.
 
