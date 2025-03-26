@@ -78,3 +78,10 @@ int responseCode = con.getResponseCode();
 - Servlets y JSP
 - Tomcat
 - Maven/Gradle
+
+# Imagenes página
+
+## Estadisticas
+![image](https://github.com/user-attachments/assets/67086c65-aa3d-4d41-8058-d35e21a40ecd)
+
+
