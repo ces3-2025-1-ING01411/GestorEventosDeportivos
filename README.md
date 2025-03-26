@@ -84,4 +84,33 @@ int responseCode = con.getResponseCode();
 ## Estadisticas
 ![image](https://github.com/user-attachments/assets/67086c65-aa3d-4d41-8058-d35e21a40ecd)
 
+## Eventos
+![image](https://github.com/user-attachments/assets/b51bed4c-baf3-4688-b6b9-b41fa1ed91e9)
+
+### Filtros
+![image](https://github.com/user-attachments/assets/7515e0dd-f59e-4299-9086-41da5d4cb5a6)
+
+![image](https://github.com/user-attachments/assets/d63a6cca-ff12-432d-bf6c-44cdd22028d2)
+
+### Crear eventos
+![image](https://github.com/user-attachments/assets/22494a84-ca9e-4e01-84c1-ec2f15fc2c51)
+
+![image](https://github.com/user-attachments/assets/254feae6-b5a6-4cb9-9444-e7ce3a682b73)
+
+![image](https://github.com/user-attachments/assets/cecfba1d-fde7-417a-a7b6-a006ebdfed40)
+
+### Comprar entradas
+![image](https://github.com/user-attachments/assets/2c042fc7-99a5-4053-8faf-d2cafd5c3c3c)
+
+### Actualizar estado
+![image](https://github.com/user-attachments/assets/10c681af-74c2-4350-a952-737616f35d55)
+
+
+
+## Equipos
+![image](https://github.com/user-attachments/assets/bd33b3d7-2c13-4409-a3af-c0a7934bf90e)
+
+## Jugadores
+![image](https://github.com/user-attachments/assets/0e773fc4-11d0-4875-8333-0975ef503281)
+
 
