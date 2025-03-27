@@ -154,13 +154,50 @@ import java.util.*;
             return;
         }
 
-        //Un evento debe tener al menos dos equipos participantes del mismo deporte
+        // validar que los equipos existen y que son del mismo deporte
         JsonArray jsonEquipos = requestBody.get("equiposParticipantes").getAsJsonArray();
         if (jsonEquipos.size() < 2) {
             RequestUtils.sendJsonResponse(
                     resp,
                     HttpServletResponse.SC_BAD_REQUEST,
                     new ApiResponse("error","El evento debe tener como minimo 2 equipos participantes.")
+            );
+            return;
+        }
+
+        //validar que los equipos del evento sean del mismo deporte
+        Set<String> deportesEvento = new HashSet<>();
+        List<EquipoDAO> equiposSeleccionados = new ArrayList<>();
+
+        for (JsonElement idEquipoEvento: jsonEquipos) {
+            int idEquipo = idEquipoEvento.getAsInt();
+            boolean equipoEncontrado = false;
+
+            for (EquipoDAO equipo : equipos) {
+                if (equipo.getId() == idEquipo) {
+                    deportesEvento.add(equipo.getDeporte());
+                    equiposSeleccionados.add(equipo);
+                    equipoEncontrado = true;
+                    break;
+                }
+            }
+
+            if (!equipoEncontrado) {
+                RequestUtils.sendJsonResponse(
+                        resp,
+                        HttpServletResponse.SC_BAD_REQUEST,
+                        new ApiResponse("error", "El equipo con ID " + idEquipo + " no existe.")
+                );
+                return;
+            }
+        }
+
+        // si hay más de un deporte en la lista, los equipos no son del mismo deporte
+        if (deportesEvento.size() > 1) {
+            RequestUtils.sendJsonResponse(
+                    resp,
+                    HttpServletResponse.SC_BAD_REQUEST,
+                    new ApiResponse("error","Los equipos deben tener el mismo deporte.")
             );
             return;
         }
@@ -238,7 +275,7 @@ import java.util.*;
         switch (pathInfo != null ? pathInfo : "") {
             case "":
                 JsonObject requestBody = RequestUtils.getParamsFromBody(req);
-                EventoService.actualizarEvento(eventoActual, requestBody, resp);
+                EventoService.actualizarEvento(eventoActual, requestBody, resp, equipos);
                 break;
             case "/vender-entradas":
                 EventoService.venderEntradas(eventoActual, req,resp);

@@ -1,5 +1,6 @@
 package co.edu.poli.ces3.gestoreventosdeportivos.services;
 
+import co.edu.poli.ces3.gestoreventosdeportivos.dao.EquipoDAO;
 import co.edu.poli.ces3.gestoreventosdeportivos.dao.EventoDAO;
 import co.edu.poli.ces3.gestoreventosdeportivos.dto.EventoResponse;
 import co.edu.poli.ces3.gestoreventosdeportivos.utils.ApiResponse;
@@ -14,15 +15,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Stack;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EventoService {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public static void actualizarEvento(EventoDAO evento, JsonObject requestBody, HttpServletResponse response) throws ServletException, IOException {
+    public static void actualizarEvento(EventoDAO evento, JsonObject requestBody, HttpServletResponse response, Stack<EquipoDAO> equiposSelectACtualizar) throws ServletException, IOException {
 
         if (requestBody.has("nombre")) evento.setNombre(requestBody.get("nombre").getAsString());
         if (requestBody.has("fecha")) evento.setFecha(requestBody.get("fecha").getAsString());
@@ -36,6 +35,43 @@ public class EventoService {
                         response,
                         HttpServletResponse.SC_BAD_REQUEST,
                         new ApiResponse("error","El evento debe tener como minimo 2 equipos participantes.")
+                );
+                return;
+            }
+
+            //validar que los equipos del evento sean del mismo deporte
+            Set<String> deportesEvento = new HashSet<>();
+            List<EquipoDAO> equiposSeleccionados = new ArrayList<>();
+
+            for (JsonElement idEquipoEvento: equiposParticipantesActual) {
+                int idEquipo = idEquipoEvento.getAsInt();
+                boolean equipoEncontrado = false;
+
+                for (EquipoDAO equipo : equiposSelectACtualizar) {
+                    if (equipo.getId() == idEquipo) {
+                        deportesEvento.add(equipo.getDeporte());
+                        equiposSeleccionados.add(equipo);
+                        equipoEncontrado = true;
+                        break;
+                    }
+                }
+
+                if (!equipoEncontrado) {
+                    RequestUtils.sendJsonResponse(
+                            response,
+                            HttpServletResponse.SC_BAD_REQUEST,
+                            new ApiResponse("error", "El equipo con ID " + idEquipo + " no existe.")
+                    );
+                    return;
+                }
+            }
+
+            // si hay más de un deporte en la lista, los equipos no son del mismo deporte
+            if (deportesEvento.size() > 1) {
+                RequestUtils.sendJsonResponse(
+                        response,
+                        HttpServletResponse.SC_BAD_REQUEST,
+                        new ApiResponse("error","Los equipos deben tener el mismo deporte.")
                 );
                 return;
             }
